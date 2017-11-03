@@ -3,11 +3,11 @@
 namespace PandaDoc\Entity;
 
 /**
- * Class DocumentBuilder
+ * Class C3Builder
  *
  * @package PandaDoc\Builders
  */
-class DocumentBuilder
+class C3Builder
 {
     protected $name;
     protected $recipients;
@@ -18,7 +18,7 @@ class DocumentBuilder
     protected $file;
 
     /**
-     * DocumentBuilder constructor.
+     * C3Builder constructor.
      *
      * @param $name
      */
