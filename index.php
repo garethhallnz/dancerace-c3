@@ -19,16 +19,3 @@ $data = $c3Client->getClientAccount($clientId, 2017, 1);
 
 var_dump($data);
 
-
-
-
-
-
-
-//$client = new \GuzzleHttp\Client();
-
-//$request = $client->request('GET', 'https://lock-x1-c3api.c3exec.com/service/c3api?key=E534912C0A594207C06504294863B7AE&sourceApp=101&action=getClientDtl&client=0344');
-
-//$data = json_decode($request->getBody());
-
-//var_dump($request->getBody());

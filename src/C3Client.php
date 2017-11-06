@@ -34,15 +34,6 @@ class C3Client
    */
   public function getClientBalance($clientId) //: \stdClass
   {
-//    $params = [
-//      'client' => $clientId,
-//    ];
-//    $action = 'getClientBal';
-//
-//    $data = $this->request($clientId, $action, $params);
-//
-//    return $data;
-
     return $this->request($clientId, 'getClientBal');
   }
 
@@ -56,15 +47,6 @@ class C3Client
    */
   public function getClientDetails($clientId) //: \stdClass
   {
-//    $params = [
-//      'client' => $clientId,
-//    ];
-//    $action = 'getClientDtl';
-//
-//    $data = $this->request($action, $params);
-//
-//    return $data->ClientDtl;
-
     return $this->request($clientId, 'getClientDtl');
   }
 
@@ -81,16 +63,6 @@ class C3Client
    */
   public function getClientCollections($clientId, $view = '1', $year = '0', $month = '0') //: \stdClass
   {
-//    $params = [
-//      'client' => $clientId,
-//      'view' => $view,
-//      'month' => $month,
-//      'year' => $year
-//    ];
-//    $action = 'getColDtls';
-//    $data = $this->request($action, $params);
-//    return $data->getColDtls;
-
     $params = [
       'view' => $view,
       'year' => $year,
@@ -112,17 +84,6 @@ class C3Client
    */
   public function getClientAccount($clientId, $year = '0', $month = '0') //: \stdClass
   {
-//    $params = [
-//      'client' => $clientId,
-//      'month' => $month,
-//      'year' => $year
-//    ];
-//    $action = 'getClientAcct';
-//
-//    $data = $this->request($action, $params);
-//
-//    return $data->getClientAcct;
-
     $params = [
       'year' => $year,
       'month' => $month
@@ -140,8 +101,8 @@ class C3Client
   public function getRequestUrl($action, $params): string
   {
     $params = array_merge(['action' => $action, 'key' => $this->key, 'sourceApp' => $this->sourceApp], $params);
-    $url = self::API_URL . '?' . http_build_query($params);
-    return $url; //'?key=E534912C0A594207C06504294863B7AE&sourceApp=101&action=getClientDtl&client=0344';
+
+    return self::API_URL . '?' . http_build_query($params);
   }
 
   /**
@@ -167,8 +128,8 @@ class C3Client
       return $data;
     }
 
-//    throw new C3ApiException($data);
-    return $data;
+    throw new C3ApiException($data);
+//    return $data;
   }
 
   /**
@@ -180,9 +141,7 @@ class C3Client
   public function buildRequestUrl($clientId, $action, $params = []): string
   {
     $query = $this->stringifyParams($params);
-//    var_dump(self::API_URL."?key={$this->key}&sourceApp={$this->sourceApp}&action={$action}&client={$clientId}{$query}");die;
-    $url = self::API_URL . "?key={$this->key}&sourceApp={$this->sourceApp}&action={$action}&client={$clientId}{$query}";
-    return $url;
+    return self::API_URL . "?key={$this->key}&sourceApp={$this->sourceApp}&action={$action}&client={$clientId}{$query}";
   }
 
   /**
@@ -220,34 +179,6 @@ class C3Client
       $contents = substr_replace($contents, '"', $positionA + 1, 0);
       $contents = substr_replace($contents, '"', $positionB + 1, 0);
     }
-
-//    var_dump($contents);die;
     return $contents;
   }
 }
-
-
-
-
-
-//  /**
-//   * @param $action
-//   * @param $params
-//   * @return mixed
-//   * @throws C3ApiException
-//   */
-//  public function xxrequest($action, $params)
-//  {
-//    $client = new Client();
-//
-//    $response = $client->request('GET', $this->getRequestUrl($action, $params));
-//
-//    $body = $response->getBody();
-//    $data = json_decode($body->getContents());
-//    return $data;
-//    if (!empty($data->SUCCESS) && $data->SUCCESS == 1) {
-//      return $data;
-//    }
-//    var_dump($data);die;
-//    throw new C3ApiException($data);
-//  }
