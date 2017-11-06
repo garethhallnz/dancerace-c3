@@ -1,14 +1,15 @@
 {
-    "name": "garethhallnz/pandadoc",
+    "name": "garethhallnz/dancerace-c3",
     "type": "library",
-    "description": "PandaDoc SDK",
+    "description": "C3 SDK",
     "keywords": [
-        "PandaDocs"
+        "C3",
+        "Dancerace"
     ],
     "config": {
         "php": ">=7.0"
     },
-    "homepage": "https://github.com/garethhallnz/pandadoc",
+    "homepage": "https://github.com/garethhallnz/dancerace-c3",
     "license": "MIT",
     "authors": [
         {
@@ -18,10 +19,14 @@
         {
             "name": "Ivan Liskov",
             "email": "ivan@communica.co.nz"
+        },
+        {
+            "name": "Andre OBrien",
+            "email": "andre@communica.co.nz"
         }
     ],
     "autoload": {
-        "psr-4": { "PandaDoc\\" : "" }
+        "psr-4": { "C3\\" : "" }
     },
     "require": {
         "guzzlehttp/guzzle": "^6.3"

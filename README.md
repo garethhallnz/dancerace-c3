@@ -1,8 +1,5 @@
 # PHP library for Dancerace C3's API
 
-[![Build Status](https://travis-ci.org/garethhallnz/pandadoc.svg?branch=master)](https://travis-ci.org/garethhallnz)
-[![License](https://poser.pugx.org/garethhallnz/pandadoc/license)](https://packagist.org/packages/garethhallnz/pandadoc)
-
 This library provides convenient wrapper functions for Dancerace C3's REST API.
 
 ## Requirements
@@ -34,7 +31,7 @@ Or to install with phpunit:
     // source application ID (supplied at setup) eg:
     $sourceApp = '101';
     
-    // C3 Client ID eg:
+    Client
     $clientId = '0344';
     
     $c3 = new C3($key, $clientId, $sourceApp);
