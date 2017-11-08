@@ -13,78 +13,98 @@ use GuzzleHttp\Exception\RequestException;
  */
 abstract class C3
 {
-  /**
-   * API url.
-   *
-   * @var string
-   */
-  protected $endpoint = 'https://lock-x1-c3api.c3exec.com/service/c3api';
-
-  /**
-   * Key.
-   *
-   * @var string
-   */
   protected $key;
-
-  /**
-   * Client ID.
-   *
-   * @var string
-   */
-  protected $clientId;
-
-  /**
-   * SourceApp.
-   *
-   * @var string
-   */
   protected $sourceApp;
+  protected $guzzleClient;
+  const API_URL = 'https://lock-x1-c3api.c3exec.com/service/c3api';
 
-  /**
-   * Guzzle client.
-   *
-   * @var C3Client
-   */
-  protected $client;
-
-  /**
-   * Makes a request to the C3 API.
-   *
-   * @param $method
-   * @param $action
-   * @return mixed
-   */
-  public function request(string $method, string $action) //: \stdClass //array $options = []
+  public function __construct($key, $sourceApp, $guzzleClient)
   {
-//    if (!empty($options['query'])) {
-//      $options['query'] = http_build_query(['query']);
-//    }
-    $query = 'key=E534912C0A594207C06504294863B7AE&sourceApp=101&action=getClientDtl&client=0344';
+    $this->key = $key;
 
-    return $this->handleRequest($method, $this->endpoint . $query);
+    $this->sourceApp = $sourceApp;
+
+    $this->guzzleClient = $guzzleClient;
+  }
+
+
+  public function getRequestUrl($action, $params): string
+  {
+    $params = array_merge(['action' => $action, 'key' => $this->key, 'sourceApp' => $this->sourceApp], $params);
+
+    return self::API_URL . '?' . http_build_query($params);
   }
 
   /**
-   * Makes a request to the C3 API using the Guzzle HTTP client.
-   *
-   * @param $method
-   * @param string $uri
+   * @param $clientId
+   * @param $action
+   * @param array $params
    * @return mixed
    * @throws C3ApiException
-   *
-   * @see PandaDoc::request()
    */
-  public function handleRequest(string $method, string $uri): \stdClass
+  public function getRequest($clientId, $action, $params = [])
   {
-    try {
-      $response = $this->client->request($method, $uri);
-      $data = $response->getBody();
-      return json_decode($data->getContents());
-    } catch (RequestException $e) {
-      $response = $e->getResponse();
+    $response = $this->guzzleClient->request('GET', $this->buildRequestUrl($clientId, $action, $params));
 
-      throw new C3ApiException($response, $e);
+    $body = $response->getBody();
+
+    $contents = $body->getContents();
+
+    $contents = $this->handleJsonErrors($contents);
+
+    $data = json_decode($contents);
+
+    if (!empty($data->SUCCESS) && $data->SUCCESS == 1) {
+      return $data;
     }
+
+    throw new C3ApiException($data);
+//    return $data;
   }
+
+  /**
+   * @param $clientId
+   * @param $action
+   * @param array $params
+   * @return string
+   */
+  public function buildRequestUrl($clientId, $action, array $params = []): string
+  {
+
+    $query = [
+      'key' => $this->key,
+      'sourceApp' => $this->sourceApp,
+      'client' => $clientId,
+      'action' => $action
+    ];
+
+    if (!empty($params)) {
+      $query = array_merge($query, $params);
+    }
+
+    return self::API_URL . "?" . http_build_query($query);
+  }
+
+  /**
+   * @param $contents
+   * @return string
+   */
+  public function handleJsonErrors($contents)
+  {
+    $contents = str_replace(': 0', ':0', $contents); // ideally need to check for ': 0' in addition to ':0'
+
+    while (strpos($contents, ':0') !== false) {
+      $positionA = strpos($contents, ':0');
+      $positionB = strpos ($contents , ',', $positionA);
+
+      if ($positionB <= $positionA) {
+        $positionB = strpos ($contents , '}', $positionA);
+      }
+
+      $contents = substr_replace($contents, '"', $positionA + 1, 0);
+      $contents = substr_replace($contents, '"', $positionB + 1, 0);
+    }
+    return $contents;
+  }
+
 }
