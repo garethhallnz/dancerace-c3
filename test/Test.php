@@ -32,7 +32,7 @@ class GetClientBalanceTest extends C3
 
     $c3Client = new C3('E534912C0A594207C06504294863B7AE', '101', new Client());
 
-    return $this->assertEquals(static:API_URL . "{$service->facebookUrl}/?id={$string}&scrape=true", $url);
+    return $this->assertEquals(static::API_URL . "{$service->facebookUrl}/?id={$string}&scrape=true", $url);
   }
 
   /**
